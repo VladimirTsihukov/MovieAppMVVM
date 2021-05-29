@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/space_1x">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_mask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foreground="@color/app_grey_bg"
+        android:src="@drawable/ic_mask_film"
+        android:background="@drawable/ic_shape"
+        app:layout_constraintCircleRadius="@dimen/space_2x"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription,UnusedAttribute" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_holder_film"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_shape"
+        android:foreground="@drawable/ic_mask_poster"
+        android:scaleType="center"
+        android:src="@drawable/ic_ph_movie_grey_200"
+        app:layout_constraintEnd_toEndOf="@+id/img_mask"
+        app:layout_constraintStart_toStartOf="@+id/img_mask"
+        app:layout_constraintTop_toTopOf="@+id/img_mask"
+        tools:ignore="UnusedAttribute"
+        tools:targetApi="m" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_holder_age_category"
+        style="@style/style_text_normal"
+        android:layout_width="wrap_content"
+        android:layout_marginStart="@dimen/space_1.5x"
+        android:layout_marginTop="@dimen/space_2x"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:background="@drawable/ic_shape"
+        android:padding="5dp"
+        tools:text="@string/str_age_category"
+        app:layout_constraintStart_toStartOf="@id/img_holder_film"
+        app:layout_constraintTop_toTopOf="@+id/img_holder_film"
+        />
+
+    <include
+        layout="@layout/layout_stars_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_1x"
+        app:layout_constraintBottom_toBottomOf="@+id/img_holder_film"
+        app:layout_constraintEnd_toEndOf="@+id/img_holder_film"
+        app:layout_constraintStart_toStartOf="@+id/img_holder_film" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_holder_film_name"
+        style="@style/style_text_normal"
+        android:layout_width="0dp"
+        android:layout_marginStart="@dimen/space_1x"
+        android:layout_marginTop="4dp"
+        tools:text="@string/str_film_name"
+        app:layout_constraintEnd_toEndOf="@+id/img_holder_film"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/img_holder_film"
+        app:layout_constraintTop_toBottomOf="@+id/img_holder_film" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_holder_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_2x"
+        android:layout_marginEnd="@dimen/space_2x"
+        android:src="@drawable/ic_like_on"
+        app:layout_constraintEnd_toEndOf="@id/img_holder_film"
+        app:layout_constraintTop_toTopOf="@+id/img_holder_film"
+        tools:ignore="ContentDescription" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

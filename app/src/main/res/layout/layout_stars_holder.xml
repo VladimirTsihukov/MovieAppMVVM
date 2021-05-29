@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_holder_star_level_1"
+        style="@style/styleStar" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_holder_star_level_2"
+        style="@style/styleStar" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_holder_star_level_3"
+        style="@style/styleStar" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_holder_star_level_4"
+        style="@style/styleStar" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_holder_star_level_5"
+        style="@style/styleStar" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_holder_reviews"
+        style="@style/style_text_normal_grey"
+        android:layout_width="wrap_content"
+        android:layout_marginStart="@dimen/space_1x"
+        tools:text="@string/str_reviews"
+        android:layout_marginEnd="@dimen/space_1x"
+        android:textAllCaps="false"
+        android:textSize="10sp"
+        tools:ignore="SmallSp" />
+</LinearLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+<style name="style_name_actor">
+    <item name="android:fontFamily">@font/roboto</item>
+    <item name="android:layout_marginTop">@dimen/space_1.5x</item>
+    <item name="android:textSize">14sp</item>
+    <item name="editTextStyle">@id/normal</item>
+    <item name="android:textFontWeight" tools:ignore="NewApi">900</item>
+</style>
+
+    <style name="style_roboto_normal_900">
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textFontWeight" tools:ignore="NewApi">900</item>
+    </style>
+
+    <style name="style_text_normal">
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/app_text_white</item>
+        <item name="android:textFontWeight" tools:ignore="NewApi">900</item>
+    </style>
+
+   <style name="style_text_normal_assent" parent="style_text_normal">
+       <item name="android:textColor">@color/app_assent</item>
+   </style>
+
+    <style name="style_text_normal_grey" parent="style_text_normal">
+        <item name="android:textColor">@color/app_text_grey</item>
+    </style>
+
+    <style name="tv_loader">
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">@color/app_assent</item>
+    </style>
+
+    <style name="progress_bar_style">
+        <item name="android:indeterminateTint">@color/app_assent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="styleStar">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_margin">@dimen/space_0.5x</item>
+        <item name="android:src">@drawable/ic_star_off</item>
+    </style>
+</resources>

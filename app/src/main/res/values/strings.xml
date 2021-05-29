@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name" translatable="false">MovieAppMVVM</string>
+    <string name="back">Back</string>
+    <string name="str_film_name" translatable="false">Avengers: End Game</string>
+    <string name="str_movie_genre" translatable="false">Action, Adventure, Fantasy</string>
+    <string name="str_age_category">13+</string>
+    <string name="str_reviews">125 Reviews</string>
+    <string name="str_story_line">Storyline</string>
+    <string name="str_text_story_line" translatable="false">After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos\' actions and restore balance to the universe.</string>
+    <string name="str_cast">Cast:</string>
+    <string name="str_name_actor_1" translatable="false">Robert Downey Jr.</string>
+    <string name="movies_list">Movies list</string>
+    <string name="label_frg_mov_list" translatable="false">FragmentMoviesList</string>
+    <string name="label_frg_mov_details" translatable="false">FragmentMoviesDetails</string>
+    <string name="data_loading">Data loading…</string>
+    <string name="favorite">Favorite</string>
+    <string name="top_rate">Top rate</string>
+    <string name="popular">Popular</string>
+    <string name="error_internet_not_connect">Error: internet not connect</string>
+    <string name="error_server_connect">Error: server not connect</string>
+    <string name="fragment_age_category">%s+</string>
+    <string name="fragment_reviews">%s Reviews</string>
+    <string name="internet_is_not_connected">Internet is not connected…</string>
+    <string name="dialog_button_yes">Yes</string>
+    <string name="dialog_button_hide">Hide</string>
+    <string name="snackBar_title_device_is_offline_version_q">No internet connection.\nOpen setting internet connection?</string>
+    <string name="snackBar_title_device_is_offline">No internet connection.</string>
+</resources>
