@@ -91,7 +91,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         stopAnimateShimmer()
 
         list?.let {
-            adapterMovies.movies = it
+            adapterMovies.bindMovies(it)
         }
     }
 

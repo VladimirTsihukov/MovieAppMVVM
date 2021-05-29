@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.androidapp.movieappmvvm.R
 import com.androidapp.movieappmvvm.data.dataDb.DataDBMovies
@@ -17,11 +18,7 @@ class AdapterMovies(
     private val onItemClickListener: OnItemClickListener,
 ) : RecyclerView.Adapter<AdapterMovies.HolderMovies>() {
 
-    var movies: List<DataDBMovies> = listOf()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+    private var movies: List<DataDBMovies> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HolderMovies {
         return HolderMovies(
@@ -37,6 +34,12 @@ class AdapterMovies(
 
     override fun getItemCount(): Int = movies.size
 
+    fun bindMovies(newMovies: List<DataDBMovies>) {
+        val diffUtilResult = DiffUtil.calculateDiff(DiffUtilMovie(oldList = movies, newList = newMovies))
+        diffUtilResult.dispatchUpdatesTo(this)
+        movies = newMovies
+    }
+
     inner class HolderMovies(item: View) : RecyclerView.ViewHolder(item) {
         private val imageFilm: ImageView = item.findViewById(R.id.img_holder_film)
         private val iconLike: ImageView = item.findViewById(R.id.img_holder_like)
@@ -45,7 +48,7 @@ class AdapterMovies(
             iconLike.setOnClickListener {
                 onItemClickListener.onClickLikeMovies(movies[adapterPosition].likeMovie, movies[adapterPosition])
                 movies[adapterPosition].likeMovie = !movies[adapterPosition].likeMovie
-                notifyDataSetChanged()
+                notifyItemChanged(adapterPosition)
             }
             imageFilm.setOnClickListener {
                 onItemClickListener.onItemClick(movies[adapterPosition].id)
