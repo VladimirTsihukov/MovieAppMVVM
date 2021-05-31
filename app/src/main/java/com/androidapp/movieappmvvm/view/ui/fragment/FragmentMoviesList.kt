@@ -1,10 +1,12 @@
 package com.androidapp.movieappmvvm.view.ui.fragment
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androidapp.movieappmvvm.R
 import com.androidapp.movieappmvvm.data.EnumTypeMovie
@@ -42,7 +44,6 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     private fun initBottomNavigation() {
         activity?.let {
             it.bottom_navigation.setOnNavigationItemSelectedListener { item ->
-                startAnimateShimmer()
                 when (item.itemId) {
                     R.id.nav_popular -> {
                         mViewModelMovieList.loadMoviesMovies(EnumTypeMovie.POPULAR)
@@ -66,6 +67,13 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private fun initRecycler(view: View) {
         recycler = view.findViewById(R.id.res_view_move_list)
+        recycler.apply {
+           val spanCount =  when (resources.configuration.orientation) {
+               Configuration.ORIENTATION_LANDSCAPE -> 4
+               else -> 2
+           }
+            layoutManager = GridLayoutManager(activity, spanCount)
+        }
         adapterMovies = AdapterMovies(click)
         recycler.adapter = adapterMovies
     }
