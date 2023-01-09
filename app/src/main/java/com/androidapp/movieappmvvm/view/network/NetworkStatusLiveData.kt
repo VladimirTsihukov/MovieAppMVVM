@@ -1,12 +1,16 @@
 package com.androidapp.movieappmvvm.view.network
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
 import androidx.lifecycle.LiveData
+import com.androidapp.movieappmvvm.di.components.AppScope
+import javax.inject.Inject
 
-class NetworkStatusLiveData (context: Context) : LiveData<Boolean>() {
+@AppScope
+class NetworkStatusLiveData @Inject constructor(context: Context) : LiveData<Boolean>() {
 
     private val availableNetworks = mutableSetOf<Network>()
     private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -24,6 +28,7 @@ class NetworkStatusLiveData (context: Context) : LiveData<Boolean>() {
         }
     }
 
+    @SuppressLint("MissingPermission")
     override fun onActive() {
         connectivityManager.registerNetworkCallback(request, callback)
     }
@@ -32,6 +37,7 @@ class NetworkStatusLiveData (context: Context) : LiveData<Boolean>() {
         connectivityManager.unregisterNetworkCallback(callback)
     }
 
+    @SuppressLint("MissingPermission")
     fun isNetworkAvailable() = connectivityManager.allNetworks.isNotEmpty()
 
     private fun update(online: Boolean) {

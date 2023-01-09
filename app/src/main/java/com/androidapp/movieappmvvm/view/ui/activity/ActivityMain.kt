@@ -1,20 +1,18 @@
 package com.androidapp.movieappmvvm.view.ui.activity
 
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import com.androidapp.movieappmvvm.App
 import com.androidapp.movieappmvvm.R
-import com.bumptech.glide.load.engine.Resource
+import com.androidapp.movieappmvvm.di.components.appComponent
+import com.androidapp.movieappmvvm.view.network.NetworkStatusLiveData
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
+import javax.inject.Inject
 
 private const val REG_CODE_SETTING = 789
 
@@ -22,16 +20,21 @@ class ActivityMain : AppCompatActivity() {
 
     private lateinit var snackBar: Snackbar
 
+    @Inject
+    lateinit var networkStatusLiveData: NetworkStatusLiveData
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        initSnackBar()
-        setVisibilityProgressBar(App.networkStatusLiveData.isNetworkAvailable())
+        appComponent.inject(this)
 
-        App.networkStatusLiveData.observe(this, {
+        initSnackBar()
+        setVisibilityProgressBar(networkStatusLiveData.isNetworkAvailable())
+
+        networkStatusLiveData.observe(this) {
             setVisibilityProgressBar(it)
-        })
+        }
     }
 
     override fun onStart() {

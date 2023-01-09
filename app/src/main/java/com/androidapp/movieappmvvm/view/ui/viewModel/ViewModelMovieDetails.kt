@@ -2,23 +2,29 @@ package com.androidapp.movieappmvvm.view.ui.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.androidapp.movieappmvvm.App
 import com.androidapp.movieappmvvm.data.dataApi.ActorsInfo
 import com.androidapp.movieappmvvm.data.dataApi.MovieActors
 import com.androidapp.movieappmvvm.data.dataApi.getListActor
 import com.androidapp.movieappmvvm.data.dataApi.getMovieDetails
 import com.androidapp.movieappmvvm.data.dataDb.DataDBMoviesDetails
-import com.androidapp.movieappmvvm.model.api.ApiFactory
+import com.androidapp.movieappmvvm.model.api.ApiService
 import com.androidapp.movieappmvvm.model.database.DatabaseContact.SEPARATOR
+import com.androidapp.movieappmvvm.model.database.databaseMoviesList.DbMovies
+import com.androidapp.movieappmvvm.view.network.NetworkStatusLiveData
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelMovieDetails : BaseViewModel() {
+class ViewModelMovieDetails @Inject constructor(
+    private val apiService: ApiService,
+    private val dbMovies: DbMovies,
+    private val networkStatusLiveData: NetworkStatusLiveData,
+) : BaseViewModel() {
 
     val liveDataMoviesDetails = MutableLiveData<DataDBMoviesDetails>()
     val liveDataMovieActors = MutableLiveData<List<ActorsInfo>>()
 
     fun loadMovieIdDetails(id: Long) {
-        App.networkStatusLiveData.isNetworkAvailable().let { online ->
+        networkStatusLiveData.isNetworkAvailable().let { online ->
             if (online) {
                 loadMovieDetailInServer(id)
             } else {
@@ -32,7 +38,7 @@ class ViewModelMovieDetails : BaseViewModel() {
     private fun loadMovieDetailInServer(id: Long) {
         scope.launch {
             val movieDetails =
-                ApiFactory.apiServiceMovie.getMovieByIdAsync(id)
+                apiService.getMovieByIdAsync(id)
             if (movieDetails.isSuccessful) {
                 movieDetails.body()?.let {
                     liveDataMoviesDetails.postValue(it.getMovieDetails())
@@ -54,7 +60,7 @@ class ViewModelMovieDetails : BaseViewModel() {
     }
 
     private fun loadMoviesActors(id: Long) {
-        App.networkStatusLiveData.isNetworkAvailable().let { online ->
+        networkStatusLiveData.isNetworkAvailable().let { online ->
             if (online) {
                 loadActorsInServer(id)
             } else {
@@ -66,7 +72,7 @@ class ViewModelMovieDetails : BaseViewModel() {
     private fun loadActorsInServer(id: Long) {
         scope.launch {
             val movieActors =
-                ApiFactory.apiServiceMovie.getMovieActorsCoroutineAsync(id)
+                apiService.getMovieActorsCoroutineAsync(id)
             if (movieActors.isSuccessful) {
                 movieActors.body()?.let { MovieActors ->
                     liveDataMovieActors.postValue(getListActor(MovieActors.cast))

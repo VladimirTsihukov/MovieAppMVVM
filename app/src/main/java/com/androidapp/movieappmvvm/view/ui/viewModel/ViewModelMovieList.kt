@@ -11,15 +11,23 @@ import com.androidapp.movieappmvvm.data.dataApi.parsInDataDBMovies
 import com.androidapp.movieappmvvm.data.dataDb.DataDBMovies
 import com.androidapp.movieappmvvm.data.dataDb.parsInDataDBMoviesLike
 import com.androidapp.movieappmvvm.data.dataDb.parsInDataDataDBMovies
-import com.androidapp.movieappmvvm.model.api.ApiFactory
+import com.androidapp.movieappmvvm.model.api.ApiService
+import com.androidapp.movieappmvvm.model.database.databaseMoviesList.DbMovies
+import com.androidapp.movieappmvvm.view.network.NetworkStatusLiveData
 import com.androidapp.movieappmvvm.view.service.WorkerCacheDBMovies
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class ViewModelMovieList : BaseViewModel() {
+class ViewModelMovieList @Inject constructor(
+    private val apiService: ApiService,
+    private val dbMovies: DbMovies,
+    private val networkStatusLiveData: NetworkStatusLiveData,
+) : BaseViewModel() {
 
     private var flagMovieFavorite = false
+    private var currentTypeMovies = EnumTypeMovie.POPULAR
     val liveDataMoviesList = MutableLiveData<List<DataDBMovies>>()
 
     init {
@@ -31,10 +39,11 @@ class ViewModelMovieList : BaseViewModel() {
 
     fun loadMoviesMovies(typeMovie: EnumTypeMovie) {
         flagMovieFavorite = typeMovie.name == EnumTypeMovie.FAVORITE.name
+        currentTypeMovies = typeMovie
         if (flagMovieFavorite) {
             getMoviesListLikeForDb()
         } else {
-            App.networkStatusLiveData.isNetworkAvailable().let { online ->
+            networkStatusLiveData.isNetworkAvailable().let { online ->
                 if (online) {
                     getMovieInServer(typeMovie)
                 } else {
@@ -87,7 +96,11 @@ class ViewModelMovieList : BaseViewModel() {
                 dbMovies.moviesLike().deleteMoviesLike(movie.id)
                 dbMovies.movies().setMoviesIdLikeInDb(movie.id, movie.likeMovie)
                 if (flagMovieFavorite) {
-                    liveDataMoviesList.postValue(parsInDataDataDBMovies(dbMovies.moviesLike().getMoviesLike()))
+                    liveDataMoviesList.postValue(
+                        parsInDataDataDBMovies(
+                            dbMovies.moviesLike().getMoviesLike()
+                        )
+                    )
                 }
             } catch (e: Exception) {
                 liveDataError.postValue(e.message)
@@ -99,9 +112,13 @@ class ViewModelMovieList : BaseViewModel() {
         scope.launch {
             when (typeMovie.name) {
                 EnumTypeMovie.POPULAR.name ->
-                    liveDataMoviesList.postValue(dbMovies.movies().getMoviesCategory(typeMovie.name))
+                    liveDataMoviesList.postValue(
+                        dbMovies.movies().getMoviesCategory(typeMovie.name)
+                    )
                 EnumTypeMovie.TOP.name ->
-                    liveDataMoviesList.postValue(dbMovies.movies().getMoviesCategory(typeMovie.name))
+                    liveDataMoviesList.postValue(
+                        dbMovies.movies().getMoviesCategory(typeMovie.name)
+                    )
             }
         }
     }
@@ -110,9 +127,9 @@ class ViewModelMovieList : BaseViewModel() {
         scope.launch {
             when (typeMovie.name) {
                 EnumTypeMovie.TOP.name ->
-                    errorHandling(ApiFactory.apiServiceMovie.getMovieTopRatedAsync(), typeMovie)
+                    errorHandling(apiService.getMovieTopRatedAsync(), typeMovie)
                 EnumTypeMovie.POPULAR.name ->
-                    errorHandling(ApiFactory.apiServiceMovie.getMoviePopularAsync(), typeMovie)
+                    errorHandling(apiService.getMoviePopularAsync(), typeMovie)
             }
         }
     }
@@ -145,5 +162,6 @@ class ViewModelMovieList : BaseViewModel() {
 
     override fun handleError(error: Throwable) {
         liveDataError.postValue(error.message)
+        getMoviesInDb(currentTypeMovies)
     }
 }

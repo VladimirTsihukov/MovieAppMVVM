@@ -6,14 +6,15 @@ import android.os.Looper
 import android.view.View
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.androidapp.movieappmvvm.R
 import com.androidapp.movieappmvvm.data.dataApi.ActorsInfo
 import com.androidapp.movieappmvvm.data.dataDb.DataDBMoviesDetails
+import com.androidapp.movieappmvvm.di.components.movieDetailsComponent
 import com.androidapp.movieappmvvm.view.ui.adapter.AdapterActors
 import com.androidapp.movieappmvvm.view.ui.viewModel.ViewModelMovieDetails
-import com.androidapp.movieappmvvm.R
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_movies_details.*
@@ -23,10 +24,16 @@ import kotlin.math.roundToInt
 
 class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
 
-    private val mViewModelModelDetails: ViewModelMovieDetails by viewModels()
+    private var viewModel: ViewModelMovieDetails? = null
 
     private lateinit var recyclerView: RecyclerView
     private val adapter = AdapterActors()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel = getViewModel()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,11 +42,18 @@ class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
         recyclerView.adapter = adapter
 
         arguments?.getLong(MOVIES_KEY)?.let {
-            mViewModelModelDetails.loadMovieIdDetails(it)
+            viewModel?.loadMovieIdDetails(it)
         }
 
         initView(view)
         initObserver(view)
+    }
+
+    private fun getViewModel(): ViewModelMovieDetails? {
+        val viewModelFactory = movieDetailsComponent?.getViewModelFactory()
+        return viewModelFactory?.let {
+            ViewModelProvider(this, it).get(ViewModelMovieDetails::class.java)
+        }
     }
 
     private fun initView(view: View) {
@@ -49,30 +63,30 @@ class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
     }
 
     private fun initObserver(view: View) {
-        mViewModelModelDetails.liveDataMoviesDetails.observe(viewLifecycleOwner,
-            { movieDetail ->
+        viewModel?.apply {
+            liveDataMoviesDetails.observe(viewLifecycleOwner) { movieDetail ->
                 movieDetail?.run {
                     getInitLayout(movieDetail)
                     hideLoader()
                 }
-            })
-
-        mViewModelModelDetails.liveDataMovieActors.observe(viewLifecycleOwner,
-            { actors ->
-                actors?.let {
-                    if (it.isEmpty()) {
-                        tv_mov_list_cast.visibility = View.INVISIBLE
-                    } else {
-                        updateDataActors(it)
-                    }
-                }
-            })
-
-        mViewModelModelDetails.subscriberLiveDataError().observe(viewLifecycleOwner, {
-            activity?.let {
-                Snackbar.make(view, it.getString(R.string.error_server_connect), Snackbar.LENGTH_LONG).show()
             }
-        })
+            liveDataMovieActors.observe(viewLifecycleOwner) { actors ->
+                if (actors.isNullOrEmpty()) {
+                    tv_mov_list_cast.visibility = View.INVISIBLE
+                } else {
+                    updateDataActors(actors)
+                }
+            }
+            subscriberLiveDataError().observe(viewLifecycleOwner) {
+                activity?.let {
+                    Snackbar.make(
+                        view,
+                        resources.getString(R.string.error_server_connect),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
     }
 
     private fun updateDataActors(movieActors: List<ActorsInfo>) {

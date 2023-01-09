@@ -4,13 +4,14 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androidapp.movieappmvvm.R
 import com.androidapp.movieappmvvm.data.EnumTypeMovie
 import com.androidapp.movieappmvvm.data.dataDb.DataDBMovies
+import com.androidapp.movieappmvvm.di.components.movieListComponent
 import com.androidapp.movieappmvvm.view.ui.adapter.AdapterMovies
 import com.androidapp.movieappmvvm.view.ui.adapter.OnItemClickListener
 import com.androidapp.movieappmvvm.view.ui.viewModel.ViewModelMovieList
@@ -20,13 +21,19 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 const val MOVIES_KEY = "MOVIES"
 
-class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
+class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
 
-    private val mViewModelMovieList: ViewModelMovieList by viewModels()
+    private var viewModel: ViewModelMovieList? = null
 
     private lateinit var recycler: RecyclerView
     private lateinit var adapterMovies: AdapterMovies
     private lateinit var mShimmerContainer: ShimmerFrameLayout
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel = getViewModelList()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,30 +43,35 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         initLiveData(view)
     }
 
+    private fun getViewModelList(): ViewModelMovieList? {
+        val viewModelFactory = movieListComponent?.getViewModelFactory()
+        return viewModelFactory?.let {
+            ViewModelProvider(this@FragmentMoviesList, it).get(ViewModelMovieList::class.java)
+        }
+    }
+
     private fun initShimmerContainer(view: View) {
         mShimmerContainer = view.findViewById(R.id.shimmer_view_container)
         startAnimateShimmer()
     }
 
     private fun initBottomNavigation() {
-        activity?.let {
-            it.bottom_navigation.setOnNavigationItemSelectedListener { item ->
-                when (item.itemId) {
-                    R.id.nav_popular -> {
-                        mViewModelMovieList.loadMoviesMovies(EnumTypeMovie.POPULAR)
-                        true
-                    }
-                    R.id.nav_top -> {
-                        mViewModelMovieList.loadMoviesMovies(EnumTypeMovie.TOP)
-                        true
-                    }
-                    R.id.nav_favorite -> {
-                        mViewModelMovieList.loadMoviesMovies(EnumTypeMovie.FAVORITE)
-                        true
-                    }
-                    else -> {
-                        true
-                    }
+        activity?.bottom_navigation?.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_popular -> {
+                    viewModel?.loadMoviesMovies(EnumTypeMovie.POPULAR)
+                    true
+                }
+                R.id.nav_top -> {
+                    viewModel?.loadMoviesMovies(EnumTypeMovie.TOP)
+                    true
+                }
+                R.id.nav_favorite -> {
+                    viewModel?.loadMoviesMovies(EnumTypeMovie.FAVORITE)
+                    true
+                }
+                else -> {
+                    true
                 }
             }
         }
@@ -68,10 +80,10 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     private fun initRecycler(view: View) {
         recycler = view.findViewById(R.id.res_view_move_list)
         recycler.apply {
-           val spanCount =  when (resources.configuration.orientation) {
-               Configuration.ORIENTATION_LANDSCAPE -> 4
-               else -> 2
-           }
+            val spanCount = when (resources.configuration.orientation) {
+                Configuration.ORIENTATION_LANDSCAPE -> 4
+                else -> 2
+            }
             layoutManager = GridLayoutManager(activity, spanCount)
         }
         adapterMovies = AdapterMovies(click)
@@ -79,20 +91,20 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     }
 
     private fun initLiveData(view: View) {
-        mViewModelMovieList.liveDataMoviesList.observe(viewLifecycleOwner,
-            { movie ->
-                updateData(movie)
-            })
-
-        mViewModelMovieList.subscriberLiveDataError().observe(viewLifecycleOwner, {
-            activity?.let { fragmentActivity ->
-                Snackbar.make(
-                    view,
-                    fragmentActivity.getString(R.string.error_server_connect),
-                    Snackbar.LENGTH_SHORT
-                ).show()
+        viewModel?.apply {
+            liveDataMoviesList.observe(viewLifecycleOwner) {
+                updateData(it)
             }
-        })
+            subscriberLiveDataError().observe(viewLifecycleOwner) {
+                activity?.let { fragmentActivity ->
+                    Snackbar.make(
+                        view,
+                        fragmentActivity.getString(R.string.error_server_connect),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
 
     private fun updateData(list: List<DataDBMovies>?) {
@@ -125,9 +137,9 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
         override fun onClickLikeMovies(iconLike: Boolean, movie: DataDBMovies) {
             if (iconLike) {
-                mViewModelMovieList.deleteMoviesLikeInDb(movie)
+                viewModel?.deleteMoviesLikeInDb(movie)
             } else {
-                mViewModelMovieList.addMovieLikeInDb(movie)
+                viewModel?.addMovieLikeInDb(movie)
             }
         }
     }
