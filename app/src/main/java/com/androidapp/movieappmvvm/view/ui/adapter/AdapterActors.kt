@@ -7,7 +7,7 @@ import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.androidapp.movieappmvvm.R
 import com.androidapp.movieappmvvm.data.dataApi.ActorsInfo
-import com.androidapp.movieappmvvm.model.api.ApiFactory.BASE_URL_MOVIE_IMAGE
+import com.androidapp.movieappmvvm.model.api.ApiUtils.BASE_URL_MOVIE_IMAGE
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.view_item_holder_actor.view.*
 

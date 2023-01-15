@@ -2,7 +2,7 @@ package com.androidapp.movieappmvvm.data.dataApi
 
 import android.os.Parcelable
 import com.androidapp.movieappmvvm.data.dataDb.DataDBMoviesDetails
-import com.androidapp.movieappmvvm.model.api.ApiFactory.BASE_URL_MOVIE_IMAGE
+import com.androidapp.movieappmvvm.model.api.ApiUtils.BASE_URL_MOVIE_IMAGE
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 

@@ -3,11 +3,9 @@ package com.androidapp.movieappmvvm.view.ui.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.androidapp.movieappmvvm.App
 import kotlinx.coroutines.*
 
 abstract class BaseViewModel : ViewModel() {
-    protected val dbMovies = App.dbMovies
     protected val liveDataError = MutableLiveData<String>()
     protected val scope = CoroutineScope(
         Dispatchers.IO
