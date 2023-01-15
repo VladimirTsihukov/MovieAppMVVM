@@ -28,6 +28,6 @@ interface ApiService {
     ): Response<MovieActors>
 
     companion object {
-        const val QUERY_PARAM_MOVIE_ID_COR = "movie_id"
+        private const val QUERY_PARAM_MOVIE_ID_COR = "movie_id"
     }
 }

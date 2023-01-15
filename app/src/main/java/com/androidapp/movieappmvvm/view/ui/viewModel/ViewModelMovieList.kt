@@ -11,6 +11,7 @@ import com.androidapp.movieappmvvm.data.dataApi.parsInDataDBMovies
 import com.androidapp.movieappmvvm.data.dataDb.DataDBMovies
 import com.androidapp.movieappmvvm.data.dataDb.parsInDataDBMoviesLike
 import com.androidapp.movieappmvvm.data.dataDb.parsInDataDataDBMovies
+import com.androidapp.movieappmvvm.di.components.MovieListScope
 import com.androidapp.movieappmvvm.model.api.ApiService
 import com.androidapp.movieappmvvm.model.database.databaseMoviesList.DbMovies
 import com.androidapp.movieappmvvm.view.network.NetworkStatusLiveData
@@ -20,6 +21,7 @@ import retrofit2.Response
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+@MovieListScope
 class ViewModelMovieList @Inject constructor(
     private val apiService: ApiService,
     private val dbMovies: DbMovies,

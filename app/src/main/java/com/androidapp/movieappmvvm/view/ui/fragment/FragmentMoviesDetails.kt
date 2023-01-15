@@ -13,6 +13,7 @@ import com.androidapp.movieappmvvm.R
 import com.androidapp.movieappmvvm.data.dataApi.ActorsInfo
 import com.androidapp.movieappmvvm.data.dataDb.DataDBMoviesDetails
 import com.androidapp.movieappmvvm.di.components.movieDetailsComponent
+import com.androidapp.movieappmvvm.utils.viewModelFactory
 import com.androidapp.movieappmvvm.view.ui.adapter.AdapterActors
 import com.androidapp.movieappmvvm.view.ui.viewModel.ViewModelMovieDetails
 import com.bumptech.glide.Glide
@@ -50,9 +51,8 @@ class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
     }
 
     private fun getViewModel(): ViewModelMovieDetails? {
-        val viewModelFactory = movieDetailsComponent?.getViewModelFactory()
-        return viewModelFactory?.let {
-            ViewModelProvider(this, it).get(ViewModelMovieDetails::class.java)
+        return movieDetailsComponent?.let {
+            ViewModelProvider(this, viewModelFactory(it))[ViewModelMovieDetails::class.java]
         }
     }
 
