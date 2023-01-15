@@ -12,6 +12,7 @@ import com.androidapp.movieappmvvm.R
 import com.androidapp.movieappmvvm.data.EnumTypeMovie
 import com.androidapp.movieappmvvm.data.dataDb.DataDBMovies
 import com.androidapp.movieappmvvm.di.components.movieListComponent
+import com.androidapp.movieappmvvm.utils.viewModelFactory
 import com.androidapp.movieappmvvm.view.ui.adapter.AdapterMovies
 import com.androidapp.movieappmvvm.view.ui.adapter.OnItemClickListener
 import com.androidapp.movieappmvvm.view.ui.viewModel.ViewModelMovieList
@@ -44,9 +45,8 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
     }
 
     private fun getViewModelList(): ViewModelMovieList? {
-        val viewModelFactory = movieListComponent?.getViewModelFactory()
-        return viewModelFactory?.let {
-            ViewModelProvider(this@FragmentMoviesList, it).get(ViewModelMovieList::class.java)
+        return movieListComponent?.let {
+            ViewModelProvider(this@FragmentMoviesList, viewModelFactory(it))[ViewModelMovieList::class.java]
         }
     }
 

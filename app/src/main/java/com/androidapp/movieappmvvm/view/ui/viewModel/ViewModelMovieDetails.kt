@@ -7,6 +7,7 @@ import com.androidapp.movieappmvvm.data.dataApi.MovieActors
 import com.androidapp.movieappmvvm.data.dataApi.getListActor
 import com.androidapp.movieappmvvm.data.dataApi.getMovieDetails
 import com.androidapp.movieappmvvm.data.dataDb.DataDBMoviesDetails
+import com.androidapp.movieappmvvm.di.components.MovieDetailsScope
 import com.androidapp.movieappmvvm.model.api.ApiService
 import com.androidapp.movieappmvvm.model.database.DatabaseContact.SEPARATOR
 import com.androidapp.movieappmvvm.model.database.databaseMoviesList.DbMovies
@@ -14,6 +15,7 @@ import com.androidapp.movieappmvvm.view.network.NetworkStatusLiveData
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@MovieDetailsScope
 class ViewModelMovieDetails @Inject constructor(
     private val apiService: ApiService,
     private val dbMovies: DbMovies,
