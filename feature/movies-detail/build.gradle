@@ -1,0 +1,35 @@
+plugins {
+    id("com.android.library")
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
+}
+
+
+dependencies {
+
+    implementation project(":core")
+    implementation project(":data")
+    implementation project(":utils")
+    implementation project(":network")
+
+    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.8.0")
+
+    implementation Navigation.fragmentKtx
+    implementation Navigation.uiKtx
+
+    implementation Dagger.dagger
+    kapt Dagger.compiler
+
+    implementation Coroutine.android
+    implementation Coroutine.core
+
+    implementation Glide.glide
+    annotationProcessor Glide.compiler
+
+    implementation Room.runtime
+
+    implementation Retrofit.retrofit
+}

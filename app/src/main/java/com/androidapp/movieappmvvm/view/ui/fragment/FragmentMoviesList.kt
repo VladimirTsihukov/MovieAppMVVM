@@ -12,22 +12,19 @@ import com.androidapp.movieappmvvm.R
 import com.androidapp.movieappmvvm.data.EnumTypeMovie
 import com.androidapp.movieappmvvm.data.dataDb.DataDBMovies
 import com.androidapp.movieappmvvm.di.components.movieListComponent
-import com.androidapp.movieappmvvm.utils.viewModelFactory
-import com.androidapp.movieappmvvm.view.ui.adapter.AdapterMovies
-import com.androidapp.movieappmvvm.view.ui.adapter.OnItemClickListener
+import com.androidapp.movieappmvvm.utils.ApiUtils.MOVIES_KEY
 import com.androidapp.movieappmvvm.view.ui.viewModel.ViewModelMovieList
+import com.androidapp.moviesappmvvm.feature.movies_detail.customViewModelFactory
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-
-const val MOVIES_KEY = "MOVIES"
 
 class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
 
     private var viewModel: ViewModelMovieList? = null
 
     private lateinit var recycler: RecyclerView
-    private lateinit var adapterMovies: AdapterMovies
+    private lateinit var adapterMovies: com.androidapp.movieappmvvm.view.ui.adapter.AdapterMovies
     private lateinit var mShimmerContainer: ShimmerFrameLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,11 +39,15 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         initBottomNavigation()
         initRecycler(view)
         initLiveData(view)
+/*        Log.i("T_G", "1_movieListComponent = $movieListComponent")
+        Log.i("T_G", "2_movieListComponent = $movieListComponent")
+        Log.i("T_G", "1_DbMovies = ${movieListComponent?.getDbMovies()}")
+        Log.i("T_G", "2_DbMovies = ${movieListComponent?.getDbMovies()}")*/
     }
 
     private fun getViewModelList(): ViewModelMovieList? {
         return movieListComponent?.let {
-            ViewModelProvider(this@FragmentMoviesList, viewModelFactory(it))[ViewModelMovieList::class.java]
+            ViewModelProvider(this@FragmentMoviesList, customViewModelFactory(it))[ViewModelMovieList::class.java]
         }
     }
 
@@ -86,7 +87,7 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
             }
             layoutManager = GridLayoutManager(activity, spanCount)
         }
-        adapterMovies = AdapterMovies(click)
+        adapterMovies = com.androidapp.movieappmvvm.view.ui.adapter.AdapterMovies(click)
         recycler.adapter = adapterMovies
     }
 
@@ -125,7 +126,7 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         mShimmerContainer.visibility = View.GONE
     }
 
-    private val click = object : OnItemClickListener {
+    private val click = object : com.androidapp.movieappmvvm.view.ui.adapter.OnItemClickListener {
         override fun onItemClick(id: Long) {
             val bundle = Bundle()
             bundle.putLong(MOVIES_KEY, id)

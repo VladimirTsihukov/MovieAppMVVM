@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:name=".App"
         android:theme="@style/Theme.MovieAppMVVM">
-        <activity android:name=".view.ui.activity.ActivityMain">
+        <activity android:name=".view.ui.activity.ActivityMain"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,5 +22,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

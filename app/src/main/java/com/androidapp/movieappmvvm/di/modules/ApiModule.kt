@@ -1,7 +1,7 @@
 package com.androidapp.movieappmvvm.di.modules
 
-import com.androidapp.movieappmvvm.di.components.AppScope
-import com.androidapp.movieappmvvm.model.api.ApiService
+import com.androidapp.movieappmvvm.api.ApiService
+import com.androidapp.movieappmvvm.di.AppScope
 import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor

@@ -8,8 +8,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.androidapp.movieappmvvm.R
+import com.androidapp.movieappmvvm.api.NetworkStatusLiveData
 import com.androidapp.movieappmvvm.di.components.appComponent
-import com.androidapp.movieappmvvm.view.network.NetworkStatusLiveData
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject

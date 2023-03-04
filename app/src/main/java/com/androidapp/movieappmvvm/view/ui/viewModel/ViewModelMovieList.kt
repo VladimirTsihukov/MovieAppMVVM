@@ -4,18 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.work.*
 import com.androidapp.movieappmvvm.App
+import com.androidapp.movieappmvvm.api.ApiService
+import com.androidapp.movieappmvvm.api.NetworkStatusLiveData
+import com.androidapp.movieappmvvm.api.dataApi.Movie
+import com.androidapp.movieappmvvm.api.dataApi.MoviesList
 import com.androidapp.movieappmvvm.data.EnumTypeMovie
-import com.androidapp.movieappmvvm.data.dataApi.Movie
-import com.androidapp.movieappmvvm.data.dataApi.MoviesList
-import com.androidapp.movieappmvvm.data.dataApi.parsInDataDBMovies
 import com.androidapp.movieappmvvm.data.dataDb.DataDBMovies
 import com.androidapp.movieappmvvm.data.dataDb.parsInDataDBMoviesLike
 import com.androidapp.movieappmvvm.data.dataDb.parsInDataDataDBMovies
+import com.androidapp.movieappmvvm.data.database.databaseMoviesList.DbMovies
 import com.androidapp.movieappmvvm.di.components.MovieListScope
-import com.androidapp.movieappmvvm.model.api.ApiService
-import com.androidapp.movieappmvvm.model.database.databaseMoviesList.DbMovies
-import com.androidapp.movieappmvvm.view.network.NetworkStatusLiveData
-import com.androidapp.movieappmvvm.view.service.WorkerCacheDBMovies
+import com.androidapp.movieappmvvm.service.WorkerCacheDBMovies
+import com.androidapp.movieappmvvm.utils.ApiUtils
+import com.androidapp.moviesappmvvm.feature.movies_detail.BaseViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.util.concurrent.TimeUnit
@@ -165,5 +166,23 @@ class ViewModelMovieList @Inject constructor(
     override fun handleError(error: Throwable) {
         liveDataError.postValue(error.message)
         getMoviesInDb(currentTypeMovies)
+    }
+}
+
+internal fun Movie.parsInDataDBMovies(): DataDBMovies {
+    return this.run {
+        @Suppress("unused")
+        (DataDBMovies(
+            id = id,
+            title = title,
+            overview = overview,
+            posterPath = ApiUtils.BASE_URL_MOVIE_IMAGE + posterPath,
+            backdropPath = ApiUtils.BASE_URL_MOVIE_IMAGE + backdropPath,
+            ratings = voteAverage,
+            numberOfRatings = voteCount,
+            minimumAge = if (adult) 16 else 13,
+            likeMovie = likeMovie,
+            typeMovie = typeMovie
+        ))
     }
 }
