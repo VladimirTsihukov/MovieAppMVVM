@@ -1,2 +1,9 @@
-include ':app'
 rootProject.name = "MovieAppMVVM"
+include ':app'
+include ':data'
+include ':utils'
+include ':network'
+include ':feature:movie-list'
+include ':di'
+include ':core'
+include ':feature:movies-detail'

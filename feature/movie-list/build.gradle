@@ -1,0 +1,38 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
+
+dependencies {
+    implementation project(":data")
+    implementation project(":core")
+    implementation project(":network")
+    implementation project(":utils")
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
+
+    implementation Dagger.dagger
+    kapt Dagger.compiler
+
+    implementation ViewModel.extensions
+    implementation ViewModel.ktx
+
+    implementation Glide.glide
+    annotationProcessor Glide.compiler
+
+    implementation Work.runtime
+    implementation Work.ktx
+
+    implementation Retrofit.retrofit
+    implementation Retrofit.serializationConverter
+    implementation Retrofit.gsonConverter
+    implementation Retrofit.coroutinesAdapter
+    implementation Retrofit.loggingInterceptor
+}
